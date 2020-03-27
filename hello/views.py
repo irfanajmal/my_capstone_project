@@ -1,22 +1,31 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-import requests
+import webapp2
 
-from .models import Greeting
 
-# Create your views here.
-def index(request):
-    #return HttpResponse('Hello from Irfan. I am using Python!')
-    #return render(request, "index.html")
-    r = requests.get('http://httpbin.org/status/418')
-    print(r.text)
-    return HttpResponse('<pre>' + r.text + '</pre>')
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers["Content-Type"] = "text/html"
+        self.response.write("""
+          <html>
+            <head><title>Enter your name...</title></head>
+            <body>
+              <form action="/welcome" method="post">
+                <input type="text" name="my_name"><br>
+                <input type="submit" value="Sign In">
+              </form>
+            </body>
+            </html>""")
 
-def db(request):
 
-    greeting = Greeting()
-    greeting.save()
+class Greeting(webapp2.RequestHandler):
+    def post(self):
+        username = self.request.get("my_name")
+        welcome_string = """<html><body>
+                          Hi there, {}!
+                          </body></html>""".format(username)
+        self.response.headers["Content-Type"] = "text/html"
+        self.response.write(welcome_string)
 
-    greetings = Greeting.objects.all()
 
-    return render(request, "db.html", {"greetings": greetings})
+routes = [('/', MainPage), ('/welcome', Greeting)]
+my_app = webapp2.WSGIApplication(routes, debug=True)
+
