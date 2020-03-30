@@ -1,0 +1,98 @@
+@import url(fonts.css);
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    color: #333;
+    background: #fff;
+}
+
+/* LINKS */
+/*
+a:link, a:visited {
+    color: #447e9b;
+    text-decoration: none;
+}
+*/
+
+a:focus, a:hover {
+    color: #036;
+}
+
+a:focus {
+    text-decoration: underline;
+}
+
+h1 {
+    color: #4485b8;
+}
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li {
+    border: 1px solid red;
+    color: red;
+    background: rgba(255, 0, 0, 0.15);
+    list-style-position: inside;
+    display: block;
+    font-size: 1em;
+    margin: 0 0 3px;
+    padding: 4px 5px;
+    text-align: center;    
+    border-radius: 3px;
+}
+input, textarea {
+    width: 100%;
+    padding: 5px!important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; 
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(169,169,169);
+}
+input {	
+    height: 30px;
+}
+.success {
+    background-color: rgba(0, 128, 0, 0.15);
+    padding: 10px;
+    text-align: center;
+    color: green;
+    border: 1px solid green;
+    border-radius: 3px;
+}
+.normal {
+    padding: 4px 5px;
+    color: green;
+    border: 1px solid green;
+    border-radius: 3px;
+    text-align: center;
+    margin: 0 0 3px;
+}
+.button {
+  border:1px;
+  display:inline-block;
+  padding:8px 16px;
+  vertical-align:middle;
+  overflow:hidden;
+  text-decoration:none;
+  color:white;
+  background-color:#4485b8;
+  text-align:center;
+  cursor:pointer;
+  white-space:nowrap;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.button:hover{
+  color:#000!important;
+  background-color:#ccc!important;
+}
+
+
