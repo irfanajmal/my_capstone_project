@@ -1,45 +1,47 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
- 
 <head>
-    <title>My Messaging App</title>
- </head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Messaging App</title>
+	<link rel="stylesheet" href="{% static 'css/my.css' %}">
+</head>
  
 <body>
- <link rel="shortcut icon" href="#" />
-	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
+{% block content %}
+
+	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>	
+
 	<form method="POST" action="" novalidate>
-		<table style="vertical-align: top;" align="center" >
+		<table style="vertical-align: top;" align="center" cellpadding="10" border=0>
 		<thead>
 		<tr style="">
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
+			<td align='center' ><h2>Login</h2></td>
+		</tr>
+		<tr style="">
+			<td align='center' style="color: #ff0000;"><strong>{{ message }}</strong></td>
 		</tr>
 		</thead>
 		<tbody>
-		<tr style="">
-			<td style="text-align: left;"><strong>User Name:<br /></strong></td>
-			<td style=""><input name="U1" type="text" value="" /></td>
-		</tr>
-		<tr style="height: 15px">
-		</tr>
-		<tr style="">
-			<td left="" style=""><strong>Password:</strong></td>
-			<td style=""><input name="P1" type="password" value="" /></td>
-		</tr>
-		<tr style="height: 15px">
-		</tr>
-		<tr>
-			<td style=""></td>
-			<td style="text-align: justify;"><button type="submit" value="Submit">Login</button>
-			<p><a href="/register">Register New User</a></td></p>
-		</tr>
+			<tr>
+				<td>{{ form.as_p }}</td>
+			</tr>
+			<tr>
+				
+				<td align="right" >
+					<a class="button" href="/register">SignUP</a>
+					<button class="button" type="submit" value="Submit">Login</button>
+				</td>
+			</tr>
 		</tbody>
+		{% csrf_token %}
 		</table>
 	</form>
 
-<hr/>
-<p style="text-align: center;"><span style="color: #999999;"><em>&copy; Irfan</em></span></p>
+	<hr/>
+	<p style="text-align: center;"><span style="color: #999999;"><em>&copy; Irfan</em></span></p>
+{% endblock content %}
 </body>
 </html>
+
 

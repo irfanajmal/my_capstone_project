@@ -1,18 +1,38 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import requests
-
+from django import forms
+from django.core.validators import RegexValidator
 from .models import Greeting
+from django.contrib.auth.models import User
 
-# Create your views here.
+class UserLoginForm(forms.ModelForm):
+
+	validateUser = RegexValidator(r'^[0-9a-zA-Z@-_.]*$', 'Invalid user name!')
+	username = forms.CharField(max_length=10, min_length=3, required=True, validators=[validateUser] )
+	password = forms.CharField(max_length=16, min_length=8, required=True, widget=forms.PasswordInput)
+
+	class Meta:
+		model = User
+		fields = ['username', 'password']
+
+
 def index(request):
-	return render(request, "index.html")
+	submitted = False
+	if request.method == 'POST':
+		form = UserLoginForm(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
+			return HttpResponseRedirect('/register?submitted=True')
+	else:
+		form = UserLoginForm()
+		if 'submitted' in request.GET:
+			submitted = True
+			
+	return render(request, 'index.html', {'form': form, 'submitted': submitted})
+
 
 def register(request):
-	message = "Hello"
-	if request.method == 'POST':
-		message = "Hello world!"
-		return render(request, "register.html", {"message": message})
 	return render(request, "register.html", {"message": message})
 
 def db(request):
@@ -21,35 +41,4 @@ def db(request):
 	greeting.save()
 	greetings = Greeting.objects.all()
 	return render(request, "db.html", {"greetings": greetings})
-
-
-def submit(request):
-	return HttpResponse('Hello world')
-
-def username_check(username): 
-      
-	reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._-])[A-Za-z\d._-]{4,10}$"
-	val = True
-      
-	pat = re.compile(reg) 
-      
-	mat = re.search(pat, passwd) 
-      
-	if mat: 
-		return ("Invalid user name!") 
-	else: 
-		return ("Valid user name!") 
-
-
-def password_check(passwd): 
-      
-	reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
-	pat = re.compile(reg) 
-	mat = re.search(pat, passwd) 
-      
-	if mat: 
-		return ("Invalid password!") 
-	else: 
-		return ("Valid pasword!")  
-
 
