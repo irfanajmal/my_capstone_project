@@ -1,21 +1,22 @@
-{% extends "base.html" %}
-{% load admin_urls %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<! ––	<link rel="stylesheet" href="{% static 'css/my.css' %}"> 
+	<title>My Messaging App</title>
 
+
+</head>
+ 
+<body>
 {% block content %}
-  <div class="container">
-
 
 <h2>Page View Report</h2>
 
+    {{ greetings | safe }}
 
-<ul>
+{% endblock content %}
+</body>
+</html>
 
-{% for greeting in greetings %}
-    <li>{{ greeting.when }}</li>
-{% endfor %}
-
-</ul>
-
-</div>
-
-{% endblock %}

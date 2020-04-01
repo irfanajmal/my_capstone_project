@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.core.validators import RegexValidator
-
+from .db import myDB
+#from datetime import datetime
+import time
 
 class UserRegistrationForm(forms.ModelForm):
 
@@ -14,11 +16,10 @@ class UserRegistrationForm(forms.ModelForm):
 	password = forms.CharField(max_length=16, min_length=8, required=True, widget=forms.PasswordInput, validators=[validatePass] )
 	confirm_password = forms.CharField(max_length=20, min_length=8, required=True, widget=forms.PasswordInput, validators=[confirmPass] )
 
-
 	class Meta:
 		model = User
 		fields = ['username', 'password', 'password']
-	
+
 
 def register(request):
 	submitted = False
@@ -26,13 +27,27 @@ def register(request):
 		form = UserRegistrationForm(request.POST)
 		if form.is_valid():
 			cd = form.cleaned_data
-						
+			create_user(cd)
 			return HttpResponseRedirect('/register?submitted=True')
 	else:
 		form = UserRegistrationForm()
-		if 'submitted' in request.GET:
-			submitted = True
 			
 	return render(request, 'register.html', {'form': form, 'submitted': submitted})
 
+def create_user(cd):
+	username=cd['username']
+	password=cd['password']
+	now = time.localtime()
+	
+	conn = myDB.connect()
+	cursor = conn.cursor()
+	
+#check if user exists
+	
+	sql = "INSERT INTO users (username, password, date_added) VALUES (%s, %s, %s)"
+	val = (username, password, now)
+	cursor.execute(sql, val)
 
+	conn.commit()
+
+	

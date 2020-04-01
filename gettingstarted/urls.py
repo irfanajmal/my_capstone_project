@@ -18,7 +18,6 @@ import hello.register
 urlpatterns = [
     path("", hello.views.index, name="index"),
     path("register/", hello.register.register, name="register"),
-    #path("submit/", hello.views.submit, name="submit"),
     path("db/", hello.views.db, name="db"),
     path("admin/", admin.site.urls),
 ]

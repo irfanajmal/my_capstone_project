@@ -3,8 +3,10 @@ from django.http import HttpResponse
 import requests
 from django import forms
 from django.core.validators import RegexValidator
-from .models import Greeting
 from django.contrib.auth.models import User
+from .db import myDB
+import pandas as pd
+
 
 class UserLoginForm(forms.ModelForm):
 
@@ -36,9 +38,18 @@ def register(request):
 	return render(request, "register.html", {"message": message})
 
 def db(request):
+	conn = myDB.connect()
+	cursor = conn.cursor()
+	query = "SELECT * FROM users;"
+	cursor.execute(query)
+	info = cursor.fetchall()
 
-	greeting = Greeting()
-	greeting.save()
-	greetings = Greeting.objects.all()
-	return render(request, "db.html", {"greetings": greetings})
+	df = pd.DataFrame(data=info)
+	df_html = df.to_html()
+
+	return render(request, "db.html", {"greetings": df_html})
+
+
+
+
 
