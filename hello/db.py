@@ -1,5 +1,5 @@
-import subprocess
 import psycopg2
+import os
 
 class myDB():
 	def connect():

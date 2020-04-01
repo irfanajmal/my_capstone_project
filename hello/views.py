@@ -5,7 +5,6 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from .db import myDB
-
 import pandas as pd
 
 
@@ -32,7 +31,7 @@ def index(request):
 		if 'submitted' in request.GET:
 			submitted = True
 
-	return render(request, 'index.html', {'form': form, 'submitted': submitted)
+	return render(request, 'index.html', {'form': form, 'submitted': submitted} )
 
 
 def register(request):
