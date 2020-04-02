@@ -28,7 +28,7 @@ def register(request):
 		if form.is_valid():
 			cd = form.cleaned_data
 			create_user(cd)
-			return HttpResponseRedirect('/register?submitted=True')
+			submitted = True
 	else:
 		form = UserRegistrationForm()
 			
