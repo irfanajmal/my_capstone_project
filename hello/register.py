@@ -37,7 +37,8 @@ def register(request):
 def create_user(cd):
 	username=cd['username']
 	password=cd['password']
-	now = time.localtime()
+	#now = time.localtime()
+	now = time.strftime("%a, %d %b %y %H:%M:%S")
 	
 	conn = myDB.connect()
 	cursor = conn.cursor()
