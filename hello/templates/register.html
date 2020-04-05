@@ -6,7 +6,7 @@
 	<title>My Messaging App</title>
 	<link rel="stylesheet" href="{% static 'css/my.css' %}">
 </head>
- 
+
 <body>
 {% block content %}
 	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
@@ -20,20 +20,22 @@
 		<table style="vertical-align: top;" align="center" border=0>
 		<thead>
 		<tr style="">
-			<td align='center'><h2>Register New User</h2></td>
+			<td align='center' colspan=2><h2>Register New User</h2></td>
 		</tr>
 		<tr style="">
-			<td align='center' style="color: #ff0000;"><strong>{{ message }}</strong></td>
+			<td align='center' style="color: #ff0000;" colspan=2><strong>{{ message }}</strong></td>
 		</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{ form.as_p }}</td>
+				<td colspan=2>{{ form.as_p }}</td>
 			</tr>
 			<tr>
-				<td align="right" >
-					<a class="button" href="/">BACK</a>
+				<td align="Left">
 					<button class="button" type="submit" value="Submit">SUBMIT</button>
+				</td>
+				<td align="Right">
+					<a class="button" href="/">< BACK</a>
 				</td>
 			</tr>
 		</tbody>
@@ -47,4 +49,3 @@
 
 </body>
 </html>
-

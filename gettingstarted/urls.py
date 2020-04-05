@@ -21,5 +21,4 @@ urlpatterns = [
     path("register/", hello.register.register, name="register"),
     path("db/", hello.views.db, name="db"),
     path("admin/", admin.site.urls),
-    url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
 ]

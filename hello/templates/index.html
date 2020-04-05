@@ -2,36 +2,36 @@
 {% load static %}
 <html lang="en">
 <head>
+  <link rel="shortcut icon" href="favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>My Messaging App</title>
 	<link rel="stylesheet" href="{% static 'css/my.css' %}">
 </head>
- 
+
 <body>
 {% block content %}
 
-	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>	
+	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
 
 	<form method="POST" action="" novalidate>
 		<table style="vertical-align: top;" align="center" border=0>
 		<thead>
-		<tr style="" >
-			<td align='center'><h2>User Login</h2></td>
+		<tr style="">
+			<td align='center' colspan=2><h2>User Login</h2></td>
 		</tr>
 		<tr style="">
-			<td align='center' style="color: #ff0000;"><strong>{{ message }}</strong></td>
+			<td align='center' style="color: #ff0000;" colspan=2><strong>{{ message }}</strong></td>
 		</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>{{ form.as_p }}</td>
+			<tr colspan=2>
+				<td colspan=2>{{ form.as_p }}</td>
 			</tr>
-			<tr>
-				
-				<td align="right" >
-					<a class="button" href="/register">SIGN UP</a>
-					<button class="button" type="submit" value="Submit">LOG IN</button>
-				</td>
+			<tr >
+				<td align="Left" >
+					<button class="button" type="submit" value="Submit">LOG IN</button></td>
+				<td align="Right" >
+					<a class="button" href="/register">SIGN UP</a></td>
 			</tr>
 		</tbody>
 		{% csrf_token %}
@@ -40,7 +40,6 @@
 	<hr style="color: #EEEEEE;">
 	<p style="text-align: center;"><span style="color: #999999;"><em>&copy; Irfan</em></span></p>
 {% endblock content %}
+{{ submitted }}
 </body>
 </html>
-
-

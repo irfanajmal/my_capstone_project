@@ -1,6 +1,7 @@
 django
-gunicorn
+gunicorn==19.7.1
 django-heroku
 requests
 psycopg2-binary
 pandas
+argon2_cffi
