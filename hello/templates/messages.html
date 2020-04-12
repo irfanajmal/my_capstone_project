@@ -38,29 +38,30 @@
 {% block content %}
 	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
   <p>Messages for <strong>{{ user_name }}</strong></p>
-    <p>Debug: {{ message }}</p>
-    <table>
-    <tr>
-        <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
-        <td><button class="button" onclick=myFunction("new") >Sent New Messages</button></td>
-        <td><button class="button" onclick=myFunction("outbox") >View Sent Messages</button></td>
-        <td><button class="button" onclick=myFunction("inbox") >View received Messages</button></td>
-        <form method="POST" action="/" >
+    <div class="div-full-page">
+        <table>
+        <tr>
             <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
-            <input type="hidden" id="message" name="message" value="">
-            <input type="hidden" id="action" name="action" value="refresh_messages">
-            <td><button class="button" type="submit" value="Submit">Refresh View</button></td>
-            <td><span style="color: #999999;font-size: x-large " >|</span></td>
-            {% csrf_token %}
-        </form>
-        <form method="POST" action="/">
-            <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
-            <input type="hidden" id="action" name="action" value="logout">
-            <td><button class="button" type="submit" value="Submit">Log Out</button></td>
-            {% csrf_token %}
-        </form>
-    </tr>
-    </table>
+            <td><button class="button" onclick=myFunction("new") >Sent New Messages</button></td>
+            <td><button class="button" onclick=myFunction("outbox") >View Sent Messages</button></td>
+            <td><button class="button" onclick=myFunction("inbox") >View received Messages</button></td>
+            <form method="POST" action="/" >
+                <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+                <input type="hidden" id="message" name="message" value="">
+                <input type="hidden" id="action" name="action" value="refresh_messages">
+                <td><button class="button" type="submit" value="Submit">Refresh View</button></td>
+                <td><span style="color: #999999;font-size: x-large " >|</span></td>
+                {% csrf_token %}
+            </form>
+            <form method="POST" action="/">
+                <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+                <input type="hidden" id="action" name="action" value="logout">
+                <td><button class="button" type="submit" value="Submit">Log Out</button></td>
+                {% csrf_token %}
+            </form>
+        </tr>
+        </table>
+    </div>
     <p>{{ message }}</p>
   <div class="div-full-page" id="inbox_view"  >
     <p></p>
