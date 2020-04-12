@@ -123,7 +123,7 @@ div-full-page {
     text-align: center;
     margin: 0 0 3px;
 }
-.button {
+button {
   border:1px;
   display:inline-block;
   padding:8px 16px;

@@ -119,7 +119,7 @@ def index(request):
                 return render(request, "messages.html", inbox_objects)
         # IF SESSION IS NOT VALID AND USERNAME IS IN PORT
         elif username is not "" and not submitted:
-            message = message + " S1: Session Expired for " + username
+            message = message + "Session Expired for " + username
             login(request, message)
             request.close()
         #IF SESSION IS NOT VALID AND NO USER IN POST THEN NEW LOGIN
