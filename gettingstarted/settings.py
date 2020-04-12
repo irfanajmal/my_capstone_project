@@ -25,8 +25,10 @@ SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be us
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+#DEBUG = True
 
-ALLOWED_HOSTS = ['irfanweb.herokuapp.com']
+#ALLOWED_HOSTS = ['irfanweb.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -115,5 +117,5 @@ USE_TZ = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
 
