@@ -116,6 +116,7 @@ def index(request):
             #IF ACTION IS LOGOUT
             elif action == "logout":
                 logout(request)
+                request.close()
             #IF ACTION IS REFRESH OR LOAD NEW PAGE
             else:
                 #message = request.POST['message']
@@ -126,16 +127,15 @@ def index(request):
         elif username is not "" and not submitted:
             message = message + " S1: Session Expired for " + username
             login(request, message)
+            request.close()
         #IF SESSION IS NOT VALID AND NO USER IN POST THEN NEW LOGIN
         else:
-            message = message + " L1:"
             #form = UserLoginForm(request.POST)
-            login(request, message)
+            obj = login(request, message,)
+            return render(obj[0],obj[1],obj[2])
     else:
-        message = message + "L2:"
         login(request, message)
     form = UserLoginForm()
-    message = message + " L3:"
     return render(request, 'index.html', {'submitted': submitted, 'form': form, 'message': message})
 
 
@@ -151,13 +151,13 @@ def login(request, message):
         else:
             submitted = True
             MySession.set(authenticated[1], 10)
-            message = message + " L4:"
             inbox_objects = inbox(request, authenticated[1], authenticated[2], message)
-            return render(request, "messages.html", inbox_objects)
+            return request, "messages.html", inbox_objects
     else:
+
         submitted = True
-    message = message + " M:login:1:"
-    return render(request, "index.html", {'submitted': submitted, 'form': form, 'message': message})
+    #message = message + " M:login:1:"
+    #return render(request, "index.html", {'submitted': submitted, 'form': form, 'message': message})
 
 
 def logout(request):
