@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Messaging App</title>
+	<link rel="stylesheet" href="{% static 'css/my.css' %}">
+
+    <script>
+        function myFunction(varx) {
+            var new_mesg_view = document.getElementById("new_mesg_view");
+            var inbox_view = document.getElementById("inbox_view");
+            var outbox_view = document.getElementById("outbox_view");
+
+            if (varx == "new") {
+                new_mesg_view.style.display = "block"
+                inbox_view.style.display = "none"
+                outbox_view.style.display = "none"
+            }
+            else if (varx == "inbox") {
+                new_mesg_view.style.display = "none"
+                inbox_view.style.display = "block"
+                outbox_view.style.display = "none"
+            }
+            else if (varx == "outbox") {
+                new_mesg_view.style.display = "none"
+                inbox_view.style.display = "none"
+                outbox_view.style.display = "block"
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+{% block content %}
+	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
+  <p>Messages for <strong>{{ user_name }}</strong></p>
+    <p>Debug: {{ message }}</p>
+    <table>
+    <tr>
+        <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+        <td><button class="button" onclick=myFunction("new") >Sent New Messages</button></td>
+        <td><button class="button" onclick=myFunction("outbox") >View Sent Messages</button></td>
+        <td><button class="button" onclick=myFunction("inbox") >View received Messages</button></td>
+        <form method="POST" action="/" >
+            <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+            <input type="hidden" id="message" name="message" value="">
+            <input type="hidden" id="action" name="action" value="refresh_messages">
+            <td><button class="button" type="submit" value="Submit">Refresh View</button></td>
+            <td><span style="color: #999999;font-size: x-large " >|</span></td>
+            {% csrf_token %}
+        </form>
+        <form method="POST" action="/">
+            <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+            <input type="hidden" id="action" name="action" value="logout">
+            <td><button class="button" type="submit" value="Submit">Log Out</button></td>
+            {% csrf_token %}
+        </form>
+    </tr>
+    </table>
+    <p>{{ message }}</p>
+  <div class="div-full-page" id="inbox_view"  >
+    <p></p>
+    Received Messages:
+      <table class='tg' align="center">
+          <thead>
+           <tr>
+             <th>From User</th>
+             <th>Messaage</th>
+             <th>Date</th>
+           </tr>
+          </thead>
+          <tbody>
+             <tr>
+                {% for msg in from_msgs %}
+                    <tr>
+                      {% for col in msg %}
+                      <td>{{ col }}</td>
+                      {% endfor %}
+                    </tr>
+                {% endfor %}
+             </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <div class="div-full-page" id="outbox_view" hidden>
+    <p></p>
+    Sent Messages:
+      <table class='tg' align="center">
+          <thead>
+           <tr>
+             <th>To User</th>
+             <th>Messaage</th>
+             <th>Date</th>
+           </tr>
+          </thead>
+          <tbody>
+             <tr>
+                {% for msg in to_msgs %}
+                    <tr>
+                      {% for col in msg %}
+                      <td>{{ col }}</td>
+                      {% endfor %}
+                    </tr>
+                {% endfor %}
+             </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <div class="div-full-page" id="new_mesg_view" hidden>
+    <form method="POST" action="/" name='new_message'>
+        <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
+        <input type="hidden" id="action" name="action" value="send_new_message">
+      <p></p>
+      Send New Message:
+      {{ new_usr_form.as_p }}
+      <button class="button" type="submit" value="Submit">Send Message</button>
+    {% csrf_token %}
+    </form>
+  </div>
+
+	<hr style="color: #EEEEEE;">
+	<p style="text-align: center;"><span style="color: #999999;font-size: x-small " ><em>&copy; Irfan</em></span></p>
+
+{% endblock content %}
+</body>
+</html>

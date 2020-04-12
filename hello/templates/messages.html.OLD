@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Messaging App</title>
+	<link rel="stylesheet" href="{% static 'css/my.css' %}">
+</head>
+
+<body>
+{% block content %}
+	<h1 style="color: #4485b8; text-align: center;">My Messaging App</h1>
+  <div class="div-full-page">
+    <form method="POST" action="/inbox" name='iframe'>
+      <input type="hidden" name="uname" value="{{ uname }}">
+      <table class="tg" align="center">
+        <tr>
+          <th class="tg-0lax" >Logged in User:<BR><strong>{{ uname }}</strong></th>
+          <th class="tg-dvpl" ><a class="Bbutton" href="/">LOG OUT</a></th>
+        </tr>
+        <tr>
+          <td valign="top">
+            <table class="tb1">
+              <tr><td class="linkbtn" ><input class="linkbtn2" type="submit" id='fname' value="New Message"></td></tr>
+              <tr><td class="linkbtn" ><input class="linkbtn2" type="submit" id='fname' value="Inbox"></td></tr>
+              <tr><td class="linkbtn" ><input class="linkbtn2" type="submit" id='fname' value="Outbox"></td></tr>
+            </table>
+          </td>
+          <td>
+            <table class="tb2" >
+              <tr>
+                <th>
+                  {% if submitted == 'new' %}
+                  Send A New Message:
+                  {% elif submitted == 'inbox' %}
+                  Received From:
+                  {% elif submitted == 'outbox' %}
+                  Send To:
+                  {% endif %}
+                </th>
+                {% if not submitted == 'new' %}
+                <th>
+                  Message:
+                </th>
+                {% endif %}
+              </tr>
+              <tr>
+                {% if submitted == 'new' %}
+                  <td>
+                    To User:
+                    <input type="text" id="tuname" name="tuname">
+                    <p></p>
+                    Message:
+                    <textarea id="mgstext" >This is a test</textarea>
+                  </td>
+                {% elif submitted == 'inbox' %}
+                  <td>
+                    <select multiple id='from'>
+                      <option value"a">Received from A</option>
+                      <option value"b">Received from B</option>
+                      <option value"c">Received from C</option>
+                      <option value"d">Received from D</option>
+                    </select>
+                  </td>
+                  <td>
+                    <textarea id="mgsRead" >This is a test</textarea>
+                  </td>
+                {% elif submitted == 'outbox' %}
+                  <td>
+                    <select id='sent' multiple>
+                      <option value"a">Sent To A</option>
+                      <option value"b">Sent To A</option>
+                      <option value"c">Sent To A</option>
+                      <option value"d">Sent To A</option>
+                    </select>
+                  </td>
+                  <td>
+                    <textarea id="mgsRead" >This is a test</textarea>
+                  </td>
+                {% endif %}
+              </tr>
+              <!--{{ in_form.as_p }}-->
+            </table>
+            {% if submitted == 'new' %}
+              <a  class="Bbutton" text-align="right" vertical-align="Bottom" href="/send">Send</a>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    {% csrf_token %}
+    </form>
+  </div>
+	<hr style="color: #EEEEEE;">
+	<p style="text-align: center;"><span style="color: #999999;"><em>&copy; Irfan</em></span></p>
+{{ submitted }}
+{% endblock content %}
+</body>
+</html>

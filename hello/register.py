@@ -74,5 +74,6 @@ def create_user(cd):
 		cursor.execute(sql, val)
 		conn.commit()
 		result = True
-
+		cursor.close()
+		conn.close()
 	return result

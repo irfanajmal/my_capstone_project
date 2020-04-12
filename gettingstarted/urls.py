@@ -18,7 +18,10 @@ import hello.register
 
 urlpatterns = [
     path("", hello.views.index, name="index"),
+    path("inbox/", hello.views.inbox, name="inbox"),
     path("register/", hello.register.register, name="register"),
     path("db/", hello.views.db, name="db"),
-    path("admin/", admin.site.urls),
+    path("new/", hello.views.index, name="index"),
+    path("logout/", hello.views.logout, name="logout"),
+    url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
 ]
