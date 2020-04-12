@@ -1,21 +1,15 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.http import HttpResponse, Http404, HttpRequest, HttpResponseRedirect
-from django import forms
-from django.core.validators import RegexValidator
-from django.contrib.auth.models import User
-from .db import myDB
-import requests
-import pandas as pd
-import hashlib
-import sys
-import random
-import os
-import argon2, binascii
-import time
 import datetime
-from http import cookies
-import pytz
+import os
+import time
+
+import argon2
+import pandas as pd
+from django import forms
+from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
+from django.shortcuts import render
+
+from .db import myDB
 
 
 class UserLoginForm(forms.Form):
