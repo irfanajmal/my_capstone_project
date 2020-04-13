@@ -1,7 +1,6 @@
 import psycopg2
 import os
 import subprocess
-import sys
 import random
 
 class myDB():

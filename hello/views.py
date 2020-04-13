@@ -1,5 +1,6 @@
 import datetime
 import os
+import subprocess
 import time
 
 import argon2
@@ -107,13 +108,13 @@ def index(request):
                 uid = MySession.getid(request.POST['User_Name'])
                 inbox_objects = inbox(request, request.POST['User_Name'], uid, message)
                 return render(request, "messages.html", inbox_objects)
-            #IF ACTION IS LOGOUT
+            # IF ACTION IS LOGOUT
             elif action == "logout":
                 logout(request)
                 request.close()
-            #IF ACTION IS REFRESH OR LOAD NEW PAGE
+            # IF ACTION IS REFRESH OR LOAD NEW PAGE
             else:
-                #message = request.POST['message']
+                # message = request.POST['message']
                 uid = MySession.getid(request.POST['User_Name'])
                 inbox_objects = inbox(request, request.POST['User_Name'], uid, message)
                 return render(request, "messages.html", inbox_objects)
@@ -122,13 +123,12 @@ def index(request):
             message = message + "Session Expired for " + username
             login(request, message)
             request.close()
-        #IF SESSION IS NOT VALID AND NO USER IN POST THEN NEW LOGIN
+        # IF SESSION IS NOT VALID AND NO USER IN POST THEN NEW LOGIN
         else:
-            #form = UserLoginForm(request.POST)
-            obj = login(request, message,)
-            test = ""
+            # form = UserLoginForm(request.POST)
+            obj = login(request, message, )
             if obj is not None:
-                return render(obj[0],obj[1],obj[2])
+                return render(obj[0], obj[1], obj[2])
             else:
                 message = "Error! User Authentication Failed."
     else:
@@ -153,8 +153,8 @@ def login(request, message):
             return request, "messages.html", inbox_objects
     else:
         submitted = True
-    #message = message + " M:login:1:"
-    #return render(request, "index.html", {'submitted': submitted, 'form': form, 'message': message})
+    # message = message + " M:login:1:"
+    # return render(request, "index.html", {'submitted': submitted, 'form': form, 'message': message})
 
 
 def logout(request):
@@ -182,25 +182,17 @@ def register(request):
 
 
 def db(request):
-    conn = myDB.connect()
-    cursor = conn.cursor()
-    query = "SELECT * FROM users;"
-    cursor.execute(query)
-    info = cursor.fetchall()
+    #pg_backups_list = subprocess.Popen(['heroku', 'pg:backups', '--app', 'irfanweb'], stdout=subprocess.PIPE,
+    #                                   universal_newlines=True)
+    #output = pg_backups_list.stdout.readlines()
+    ##my_dbdump_list = output.strip()
+    #my_dbdump_list = output
 
-    query = "SELECT * FROM messages;"
-    cursor.execute(query)
-    m_info = cursor.fetchall()
+    pg_backups_url = subprocess.Popen(['heroku', 'pg:backups:url', '--app', 'irfanweb'], stdout=subprocess.PIPE, universal_newlines=True)
+    output = pg_backups_url.stdout.readline()
+    my_dbdump_url = output.strip()
 
-    df = pd.DataFrame(data=info)
-    df_html = df.to_html()
-
-    mdf = pd.DataFrame(data=m_info)
-    mdf_html = mdf.to_html()
-
-    cursor.close()
-    conn.close()
-    return render(request, "db.html", {"df_html": df_html, 'mdf_html': mdf_html})
+    return render(request, "db.html", {'my_dbdump_url': my_dbdump_url})
 
 
 def user_auth(cd, request) -> object:

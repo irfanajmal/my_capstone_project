@@ -29,7 +29,7 @@
         }
     </script>
     <style>
-        html, body {margin-top: 0px;margin-right: 10px;margin-bottom: 0px;margin-left: 10px;height 100%;padding: 0;font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;color: #000;background: #fff;}
+        html, body {margin-top:0px;margin-right: 10px;margin-bottom: 0;margin-left: 10px;height 100%;padding: 0;font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;color: #000;background: #fff;}
         h1 {color: #4485b8;}
         h2 {margin: 0;padding: 0;}
         a:focus, a:hover {    color: #036;}
@@ -37,14 +37,15 @@
         input {width: 100%;    padding: 5px!important;    -webkit-box-sizing: border-box;    -moz-box-sizing: border-box;    box-sizing: border-box;    border-radius: 2px;    border-style: solid;    border-width: 1px;    border-color: rgb(169,169,169);    vertical-align: Top}
         textarea {    width: 100%;    height: 100%;    padding: 5px!important;    -webkit-box-sizing: border-box;    -moz-box-sizing: border-box;    box-sizing: border-box;    border-radius: 0px;    border-style: solid;    border-width: 1px;    border-color: rgb(169,169,169);}
         label {  vertical-align: Top;}
-        div-full-page {    position: fixed;    top: 0;    bottom: 0;    width: 100%;    height: 100%;    background-color: #000;    opacity:0.8;    overflow-y: hidden;    overflow-x: hidden; }
+        div-full-page { position: fixed;    top: 0;    bottom: 0;    width: 100%;    height: 100%;    background-color: #000;    opacity:0.8;    overflow-y: hidden;    overflow-x: hidden; }
+        div-partial-page  { position: fixed;    top: 0;    bottom: 0;    width: 50%;    height: 100%;    background-color: #000;    opacity:0.8;    overflow-y: hidden;    overflow-x: hidden; }
         button {  border:1px;  display:inline-block;  padding:8px 16px;  vertical-align:middle;  overflow: auto;  text-decoration:none;  color:white;  background-color:#4485b8;  text-align:center;  cursor:pointer;  white-space:nowrap;  border-radius: 0px;  font-size: 14px;}
         .button:hover{  color: #fff!important;  #background-color: #ccc!important;  background-color: #79aec8!important;}
         table { border-color: #4485b8; float:left; border-collapse: collapse; overflow: hidden; table-layout: auto; border-radius: 0px;  padding: 0px; right: 0px; border-style:solid; border-width:0px; overflow:hidden;border-spacing:0px; }
         .tg  {overflow: hidden;table-layout: auto; float:left; width: 100%; border-collapse:collapse; border-spacing:0px;}
         .tg tr:hover { background-color: #eeeeee; color:#fdf6e3;}
         .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight: bold ;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#93a1a1;color:#fdf6e3;background-color:#657b83;text-transform: capitalize;}
-        .tg td{vertical-align:top;font-family:Arial, sans-serif;font-size:14px;padding:0px 0px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#93a1a1;color:#002b36;text-align: Left; }
+        .tg td{vertical-align:top;font-family:Arial, sans-serif;font-size:20px;padding:0px 0px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#93a1a1;color:#002b36;text-align: Left; }
     </style>
 </head>
 
@@ -112,7 +113,7 @@
           <thead>
            <tr>
              <th>To User</th>
-             <th>Messaage</th>
+             <th>Message</th>
              <th>Date</th>
            </tr>
           </thead>
@@ -130,8 +131,8 @@
       </table>
   </div>
 
-  <div class="div-full-page" id="new_mesg_view" hidden>
-    <form method="POST" action="/" name='new_message'>
+  <div class="div-partial-page" id="new_mesg_view" hidden>
+    <form method="POST" action="/" name='new_message' >
         <input type="hidden" id="User_Name" name="User_Name" value={{ user_name }}>
         <input type="hidden" id="action" name="action" value="send_new_message">
       <p></p>

@@ -20,10 +20,11 @@ class UserRegistrationForm(forms.ModelForm):
                             validators=[validatePass])
     confirm_password = forms.CharField(max_length=20, min_length=8, required=True, widget=forms.PasswordInput,
                                        validators=[confirmPass])
+    email = forms.EmailField(max_length=200, help_text='Required')
 
     class Meta:
         model = User
-        fields = ['uname', 'pword', 'confirm_password']
+        fields = ['uname', 'pword', 'confirm_password', 'email']
 
 
 def register(request):
