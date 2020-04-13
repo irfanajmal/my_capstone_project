@@ -126,7 +126,11 @@ def index(request):
         else:
             #form = UserLoginForm(request.POST)
             obj = login(request, message,)
-            return render(obj[0],obj[1],obj[2])
+            test = ""
+            if obj is not None:
+                return render(obj[0],obj[1],obj[2])
+            else:
+                message = "Error! User Authentication Failed."
     else:
         login(request, message)
     form = UserLoginForm()
@@ -140,7 +144,7 @@ def login(request, message):
         cd = form.cleaned_data
         authenticated = user_auth(cd, request)
         if not authenticated[0]:
-            message = "Error!: User name and password are incorrect."
+            message = "Error!: Failed to Authenticate the user."
             submitted = False
         else:
             submitted = True
@@ -148,7 +152,6 @@ def login(request, message):
             inbox_objects = inbox(request, authenticated[1], authenticated[2], message)
             return request, "messages.html", inbox_objects
     else:
-
         submitted = True
     #message = message + " M:login:1:"
     #return render(request, "index.html", {'submitted': submitted, 'form': form, 'message': message})
