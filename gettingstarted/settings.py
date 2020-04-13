@@ -21,11 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be used, if set, instead)."
+SECRET_KEY = "31d0402219cfb647c919a4ff8a3e810abb1aa57bcf01eb95a16a45a2dcbbfc5c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-#DEBUG = True
+#DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['irfanweb.herokuapp.com','127.0.0.1']
 #ALLOWED_HOSTS = ['*']
@@ -115,6 +115,6 @@ USE_TZ = False
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
 
 
