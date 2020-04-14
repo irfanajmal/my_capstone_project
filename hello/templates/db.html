@@ -9,13 +9,30 @@
         .tg tr:hover { background-color: #eeeeee; color:#fdf6e3;}
         .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight: bold ;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#93a1a1;color:#fdf6e3;background-color:#657b83;text-transform: capitalize;}
         .tg td{vertical-align:top;font-family:Arial, sans-serif;font-size:20px;padding:0px 0px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#93a1a1;color:#002b36;text-align: Left; }
+        button {  border:1px;  display:inline-block;  padding:8px 16px;  vertical-align:middle;  overflow: auto;  text-decoration:none;  color:white;  background-color:#4485b8;  text-align:center;  cursor:pointer;  white-space:nowrap;  border-radius: 10px;  font-size: 14px;}
+        .button:hover{  color: #fff!important;  #background-color: #ccc!important;  background-color: #79aec8!important;}
     </style>
 </head>
 
 <body>
 {% block content %}
-    <H3> Latest copy of Heroku Postgres database can be downloaded at:</H3>
-    <a href={{ my_dbdump_url }}>{{ my_dbdump_url }}</a>
+    <h3>Download Heroku Postgres DB DUMP SQL format file.</h3>
+
+        <form method="POST" action="/dbdump/" name='dbdump' >
+            <input type="hidden" id="submitted" name="submitted" value="True" >
+            <input type="hidden" id="db_file_name" name="db_file_name" value={{ db_file_name }} >
+            <input type="hidden" id="generated_on" name="generated_on" value="{{ generated_on }}" >
+            <button class="button" type="submit" value="Submit">Generate latest DBDUMP</button>
+        {% csrf_token %}
+        </form>
+
+
+    <p></p>
+    {% if db_file_name != "" %}
+        A fresh dbdump file is generated. Download from link below:
+        <br><br>
+        <a href={{ db_file_name }}>{{ db_file_name }}</a>
+    {% endif %}
 
 {% endblock content %}
 </body>

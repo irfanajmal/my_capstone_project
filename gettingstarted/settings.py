@@ -58,7 +58,7 @@ ROOT_URLCONF = "gettingstarted.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ['BASE_DIR'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -115,6 +115,9 @@ USE_TZ = False
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
+
+DBDUMP_ROOT = os.path.join(BASE_DIR, 'dbdump')
+DBDUMP_URL = '/dbdump/'
 django_heroku.settings(locals())
 
 

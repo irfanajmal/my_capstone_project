@@ -2,14 +2,15 @@ import datetime
 import os
 import subprocess
 import time
-
+import os
+import glob
 import argon2
-import pandas as pd
+from django.conf import settings
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-
 from .db import myDB
 
 
@@ -182,17 +183,53 @@ def register(request):
 
 
 def db(request):
-    #pg_backups_list = subprocess.Popen(['heroku', 'pg:backups', '--app', 'irfanweb'], stdout=subprocess.PIPE,
-    #                                   universal_newlines=True)
-    #output = pg_backups_list.stdout.readlines()
-    ##my_dbdump_list = output.strip()
-    #my_dbdump_list = output
+    exp_time = (datetime.datetime.utcnow())
+    #time_now = exp_time.strftime("%Y_%b_%d-%H_%M_%S")
+    time_now = exp_time.strftime("%d_%m_%Y-%H%M%S-%f-%z-%Z")
+    db_file_name = ""
+    db_path_file = ""
+    try:
+        submitted1 = request.POST['submitted']
+    except:
+        submitted1 = False
+    try:
+        db_file_name = request.POST['db_file_name']
+    except:
+        db_file_name = ""
+    try:
+        generated_on = str(request.POST['generated_on'])
+    except:
+        generated_on = ""
 
-    pg_backups_url = subprocess.Popen(['heroku', 'pg:backups:url', '--app', 'irfanweb'], stdout=subprocess.PIPE, universal_newlines=True)
-    output = pg_backups_url.stdout.readline()
-    my_dbdump_url = output.strip()
+    if request.method == 'POST' and submitted1 and not (submitted1 and db_file_name != ""):
+        if submitted1:
+            files = glob.glob('dbdump/Heroku_Postgres_DB*')
+            seconds = time.time() - (5 * 60)
+            for f in files:
+                try:
+                    if seconds >= os.stat(f).st_ctime:
+                        os.remove(f)
+                except:
+                    do_nothing = ""
+            files = glob.glob('dbdump/Heroku_Postgres_DB*')
+            db_file_name = "Heroku_Postgres_DBDUMP_" + time_now + ".sql"
+            if len(files) == 0:
+                pg_dump = subprocess.Popen(['pg_dump',
+                                            'postgres://rsbuhqmqigficf:652bd8fc4f26892df10cc924568a9698c53503351a202159356cc4f3292a962c@ec2-52-86-33-50.compute-1.amazonaws.com:5432/d8r5bdme8ltj0g'],
+                                           stdout=subprocess.PIPE, universal_newlines=True)
+                output = pg_dump.stdout.read()
+                db_file_name = "Heroku_Postgres_DB_" + time_now + ".sql"
+                # db_file_name = "Heroku_Postgres_DB.sql"
+                db_path_file = "dbdump/" + db_file_name
+                File1 = open(db_path_file, "w")
 
-    return render(request, "db.html", {'my_dbdump_url': my_dbdump_url})
+                File1.write(output)
+                File1. close()
+            else:
+                  db_file_name = os.path.basename(files[0])
+
+    submitted2 = False
+    return render(request, "db.html", {'db_file_name': db_file_name, 'submitted': submitted2})
 
 
 def user_auth(cd, request) -> object:
