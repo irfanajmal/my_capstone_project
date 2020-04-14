@@ -272,6 +272,7 @@ def send(request):
     user_name = request.POST['User_Name']
     to_user = request.POST['To']
     msg = request.POST['Message']
+
     now = time.strftime("%a, %d %b %y %H:%M:%S.%s")
     conn = myDB.connect()
     cursor = conn.cursor()
@@ -293,6 +294,4 @@ def send(request):
     submitted = True
     message = "Message sent"
     return message
-    # return render(request, "messages.html", {'submitted': submitted, 'message': "Message Sent", 'User_Name': request.POST['User_Name']})
-    # return requests.post('index.html', data={'submitted': "True", 'message': "Message Sent.", "User_Name":request.POST['User_Name']})
-    # return HttpResponse ("Success! Message sent.")
+

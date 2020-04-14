@@ -6,3 +6,5 @@ psycopg2-binary
 pandas~=1.0.3
 argon2_cffi
 psycopg2~=2.8.5
+cryptography
+
