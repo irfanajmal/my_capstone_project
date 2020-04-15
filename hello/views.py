@@ -12,6 +12,14 @@ from django.core.validators import RegexValidator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .db import myDB
+import cryptography
+from cryptography.fernet import Fernet
+import base64
+import os
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
 
 
 class UserLoginForm(forms.Form):
@@ -27,7 +35,7 @@ class UserLoginForm(forms.Form):
 class NewForm(forms.Form):
     validateUser = RegexValidator(r'^[0-9a-zA-Z@-_.]*$', 'Invalid user name!')
     To = forms.CharField(required=False, max_length=20, label='Send To', validators=[validateUser])
-    Message = forms.CharField(required=False, max_length=200, widget=forms.Textarea, label='Message',
+    Message = forms.CharField(required=False, max_length=10000, widget=forms.Textarea, label='Message',
                               validators=[validateUser])
 
 
@@ -89,7 +97,7 @@ def index(request):
     if request.method == 'POST':
         # IF SESSION IS VALID
         try:
-            username = request.POST['User_Name']
+            username = str(request.POST['User_Name']).lower()
         except:
             username = ""
         try:
@@ -233,7 +241,7 @@ def db(request):
 
 
 def user_auth(cd, request) -> object:
-    user_name = cd['User_Name']
+    user_name = str(cd['User_Name']).lower()
     User_password = cd['Password']
 
     conn = myDB.connect()
@@ -254,30 +262,59 @@ def user_auth(cd, request) -> object:
     return result, user_name, my_hash[1]
 
 
-def get_messages(username) -> object:
+def get_messages(username):
     conn = myDB.connect()
     cursor = conn.cursor()
-    cursor.execute("""SELECT from_usr, message, msg_time FROM messages WHERE to_usr = %(username)s""",
-                   {'username': username})
-    from_msgs = cursor.fetchall()
-    cursor.execute("""SELECT to_usr, message, msg_time FROM messages WHERE from_usr = %(username)s""",
-                   {'username': username})
-    to_msgs = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return from_msgs, to_msgs
+    try:
+        cursor.execute("""SELECT from_usr, encode(messages.bmessage, 'hex'), msg_time  FROM messages WHERE to_usr = %(username)s""",
+                       {'username': username})
+        from_msgs = cursor.fetchall()
+        cursor.execute("""SELECT to_usr, encode(messages.bmessage, 'hex'), msg_time FROM messages WHERE from_usr = %(username)s""",
+                       {'username': username})
+        to_msgs = cursor.fetchall()
+
+        d_from_msgs = []
+        d_to_msgs = []
+        _d_from_msgs = []
+        _d_to_msgs = []
+
+        i = 0
+        for msg in from_msgs:
+            if from_msgs[i][1] is not None:
+                dec_msg = mdecode(msg[1], msg[0])
+                _d_from_msgs = list(msg)
+                _d_from_msgs[1] = dec_msg
+            i += 1
+            d_from_msgs.append(_d_from_msgs)
+
+        i = 0
+        for msg in to_msgs:
+            if to_msgs[i][1] is not None:
+                dec_msg = mdecode(msg[1], username)
+                _d_to_msgs = list(msg)
+                _d_to_msgs[1] = dec_msg
+            d_to_msgs.append(_d_to_msgs)
+            i += 1
+
+    except Exception as e:
+        print ("Error while getting data from PostgreSQL", e)
+    finally:
+        if(conn):
+            cursor.close()
+            conn.close()
+    return d_from_msgs, d_to_msgs
 
 
 def send(request):
     user_name = request.POST['User_Name']
-    to_user = request.POST['To']
+    to_user = str(request.POST['To']).lower()
     msg = request.POST['Message']
-
+    enc_msg = mencode(msg, user_name)
     now = time.strftime("%a, %d %b %y %H:%M:%S.%s")
     conn = myDB.connect()
     cursor = conn.cursor()
-    sql = "INSERT INTO messages (from_usr, to_usr, message, msg_time) VALUES (%s, %s, %s, %s)"
-    val = (user_name, to_user, msg, now)
+    sql = "INSERT INTO messages (from_usr, to_usr, bmessage, msg_time) VALUES (%s, %s, %s, %s)"
+    val = (user_name, to_user, enc_msg, now)
     try:
         cursor.execute(sql, val)
     except:
@@ -294,4 +331,45 @@ def send(request):
     submitted = True
     message = "Message sent"
     return message
+
+
+def mdecode(enmessage, username):
+    conn = myDB.connect()
+    cursor = conn.cursor()
+    cursor.execute("""SELECT pword FROM users WHERE uname = %(username)s""", {'username': username})
+    my_hash = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    key = gen_key_m(my_hash)
+    f = Fernet(key)
+    em = bytes.fromhex(enmessage)
+    msg = f.decrypt(em)
+    return msg.decode()
+
+
+def mencode(message, username):
+    conn = myDB.connect()
+    cursor = conn.cursor()
+    cursor.execute("""SELECT pword FROM users WHERE uname = %(username)s""", {'username': username})
+    my_hash = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    key = gen_key_m(my_hash)
+    f = Fernet(key)
+    enm = f.encrypt(message.encode())
+    return enm
+
+
+def gen_key_m(my_hash):
+    password_provided = str(my_hash)
+    password = password_provided.encode()
+    salt = b'\xea\xbf\xbb\xac{\xc5\xaa\xf0)\x05\x93cXjI\x93'
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+        backend=default_backend()
+    )
+    return base64.urlsafe_b64encode(kdf.derive(password))
 

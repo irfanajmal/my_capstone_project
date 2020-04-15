@@ -1,5 +1,5 @@
 git add .
-git commit -m "Demo"
+git commit -m "encryption enabled"
 git push heroku master
 heroku open
 

@@ -46,7 +46,7 @@ def register(request):
 
 
 def create_user(cd):
-    uname = cd['uname']
+    uname = str(cd['uname']).lower()
     pword = cd['pword']
     # now = time.localtime()
     now = time.strftime("%a, %d %b %y %H:%M:%S.%s")
