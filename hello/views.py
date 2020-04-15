@@ -367,3 +367,6 @@ def gen_key_m(my_hash):
     )
     return base64.urlsafe_b64encode(kdf.derive(password))
 
+
+def password_reset(request):
+    return render(request, "registration/password_reset_form.html")
