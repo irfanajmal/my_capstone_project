@@ -1,15 +1,11 @@
 import datetime
-import os
 import subprocess
 import time
-import os
 import glob
 import argon2
-from django.conf import settings
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .db import myDB
 import cryptography
@@ -19,7 +15,6 @@ import os
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
 
 
 class UserLoginForm(forms.Form):
@@ -192,7 +187,6 @@ def register(request):
 
 def db(request):
     exp_time = (datetime.datetime.utcnow())
-    #time_now = exp_time.strftime("%Y_%b_%d-%H_%M_%S")
     time_now = exp_time.strftime("%d_%m_%Y-%H%M%S-%f-%z-%Z")
     db_file_name = ""
     db_path_file = ""

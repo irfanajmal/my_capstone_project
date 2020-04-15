@@ -4,6 +4,7 @@ from django.views.generic import RedirectView
 from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 admin.autodiscover()
 
@@ -26,5 +27,6 @@ urlpatterns = [
     path("new/", hello.views.index, name="index"),
     path("logout/", hello.views.logout, name="logout"),
     url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
+    url('^', include('django.contrib.auth.urls')),
 ] + static(settings.DBDUMP_URL, document_root=settings.DBDUMP_ROOT)
 

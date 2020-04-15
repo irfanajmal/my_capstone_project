@@ -18,7 +18,7 @@
         button {  border:1px;  display:inline-block;  padding:8px 16px;  vertical-align:middle;  overflow:hidden;  text-decoration:none;  color:white;  background-color:#4485b8;  text-align:center;  cursor:pointer;  white-space:nowrap;  border-radius: 8px;  font-size: 12px;}
         .button:hover{  color: #fff!important;  #background-color: #ccc!important;  background-color: #79aec8!important;}
         table {  table-layout: auto;  display: table;  border-color: gray; border:2px;  background-color:#EEEEEE;  border-radius: 8px;  padding: 10px;  right: 0px;}
-
+        .footer {  position:absolute;   bottom:0;   width:100%;   height:60px; }
     </style>
 </head>
 
@@ -58,9 +58,10 @@
 		</table>
 	</form>
 	{% endif %}
-<hr/>
-<p style="text-align: center;"><span style="color: #999999;"><font size="2"><em>&copy; Irfan</em></font></span></p>
+	<div class="footer" id="footer">
+        <hr style="color: #EEEEEE;">
+	    <p style="text-align: center;"><span style="color: #999999;font-size: x-small " ><em>&copy; Irfan Ajmal</em></span></p>
+    </div>
 {% endblock content %}
-
 </body>
 </html>
