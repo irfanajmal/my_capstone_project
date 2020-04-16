@@ -187,7 +187,7 @@ def register(request):
 
 def db(request):
     exp_time = (datetime.datetime.utcnow())
-    time_now = exp_time.strftime("%d_%m_%Y-%H%M%S-%f-%z-%Z")
+    time_now = exp_time.strftime("%d_%m_%Y-%H%M%S-%f")
     db_file_name = ""
     db_path_file = ""
     try:

@@ -1,5 +1,5 @@
 git add .
-git commit -m "Final-1"
+git commit -m "trying to fix static files issue"
 git push heroku master
 heroku open
 

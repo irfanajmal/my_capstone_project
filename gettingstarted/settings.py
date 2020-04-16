@@ -27,7 +27,7 @@ SECRET_KEY = "31d0402219cfb647c919a4ff8a3e810abb1aa57bcf01eb95a16a45a2dcbbfc5c"
 DEBUG = False
 #DEBUG = True
 
-ALLOWED_HOSTS = ['irfanweb.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['irfanweb.herokuapp.com', '127.0.0.1']
 #ALLOWED_HOSTS = ['*']
 
 
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "gettingstarted.urls"
@@ -113,12 +114,14 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
 DBDUMP_ROOT = os.path.join(BASE_DIR, 'dbdump')
 DBDUMP_URL = '/dbdump/'
-django_heroku.settings(locals())
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+django_heroku.settings(locals())
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

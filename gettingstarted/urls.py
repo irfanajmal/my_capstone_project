@@ -23,14 +23,12 @@ urlpatterns = [
     path("", hello.views.index, name="index"),
     path("inbox/", hello.views.inbox, name="inbox"),
     path("register/", hello.register.register, name="register"),
-    path("dbdump/", hello.views.db, name="db"),
+    path("dbdump/", hello.views.db, name="dbdump"),
     path("new/", hello.views.index, name="index"),
     path("logout/", hello.views.logout, name="logout"),
     path("password_reset/", registration.PasswordResetView, name="password_reset"),
     path("reset/", registration.reset, name="reset"),
     path("change/", registration.change, name="reset"),
     url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
-    #url('^', include('django.contrib.auth.urls')),
-    path('admin/', admin.site.urls),
 ] + static(settings.DBDUMP_URL, document_root=settings.DBDUMP_ROOT)
 
