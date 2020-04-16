@@ -30,22 +30,26 @@ class UserRegistrationForm(forms.ModelForm):
         fields = ['uname', 'pword', 'confirm_password', 'email']
 
 
-def register(request):
+def signup(request):
     submitted = False
     message = ""
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            if create_user(cd):
-                submitted = True
-            else:
-                submitted = False
-                message = "Error: User exists!"
-    else:
+    try:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                if create_user(cd):
+                    submitted = True
+                else:
+                    submitted = False
+                    message = "Error: User exists!"
+        else:
+            form = UserRegistrationForm()
+    except Exception as e:
+        message = e
         form = UserRegistrationForm()
 
-    return render(request, 'register.html', {'form': form, 'submitted': submitted, 'message': message})
+    return render(request, 'signup.html', {'form': form, 'submitted': submitted, 'message': message})
 
 
 def create_user(cd):

@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 #admin.autodiscover()
 
 import hello.views
-import hello.register
+import hello.register as register
 import hello.registration as registration
 
 # To add a new path, first import the app:
@@ -22,7 +22,7 @@ import hello.registration as registration
 urlpatterns = [
     path("", hello.views.index, name="index"),
     path("inbox/", hello.views.inbox, name="inbox"),
-    path("register/", hello.register.register, name="register"),
+    path("signup/", register.signup, name="signup"),
     path("dbdump/", hello.views.db, name="dbdump"),
     path("new/", hello.views.index, name="index"),
     path("logout/", hello.views.logout, name="logout"),

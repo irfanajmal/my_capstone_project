@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-{% load static %}
+
 <html lang="en">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>My Messaging App</title>
-	<link rel="stylesheet" href="{% static 'css/my.css' %}">
     <style>
         html, body {margin-top: 0px;margin-right: 10px;margin-bottom: 0px;margin-left: 10px;height 100%;padding: 0;font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;color: #000;background: #fff;}
         h1 {color: #4485b8;}
@@ -33,6 +32,7 @@
 
 	<form method="POST" action="" novalidate>
 		<table style="vertical-align: top;" align="center" border=0>
+            {% csrf_token %}
 		<thead>
 		<tr style="">
 			<td align='center' colspan=2><h2>Register New User</h2></td>
@@ -54,7 +54,6 @@
 				</td>
 			</tr>
 		</tbody>
-		{% csrf_token %}
 		</table>
 	</form>
 	{% endif %}

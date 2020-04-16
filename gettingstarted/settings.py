@@ -24,11 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "31d0402219cfb647c919a4ff8a3e810abb1aa57bcf01eb95a16a45a2dcbbfc5c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 
-ALLOWED_HOSTS = ['irfanweb.herokuapp.com', '127.0.0.1']
-#ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['irfanweb.herokuapp.com', '127.0.0.1:8000', '127.0.0.1:5000']
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -103,11 +103,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+#TIME_ZONE = "UTC"
 
-USE_I18N = True
+#USE_I18N = True
 
-USE_L10N = True
+#USE_L10N = True
 
 USE_TZ = False
 
