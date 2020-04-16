@@ -185,6 +185,7 @@ COPY public.users (id, uname, email, pword, date_added, hash) FROM stdin;
 79	user1	user1@irfanweb.heroku.com	$argon2id$v=19$m=32768,t=16,p=2$9iV7R26RxqybdAiWU+dSrQ$cVfpUnHxaaDycL2lSIk9OXmylfDpKwNE/eb3ReYmQb4	2020-04-16 01:09:45.1587	\\x4a72556d42486e7368615831694e5341616d567a6e49697234476a434c734a684b59475636696c634b30773d
 80	user2	user2@irfanweb.heroku.com	$argon2id$v=19$m=32768,t=16,p=2$y6CAZzP1oXnMtA7s7gxzwA$YzCMxBKWjUxQBApoQ/XHXsV2bmKQYPCi64MruiJZrm8	2020-04-16 01:10:26.1587	\\x6b656d643849794c6b4d4d45625f67735852414f326c4f6b513071644d634a3472766566635474302d70593d
 82	user4	user4@irfanweb.info	$argon2id$v=19$m=32768,t=16,p=2$5FVSA3bcrzpY5Llt72E/Pg$LWgVDmbnVHsqFauetE21Q8cGL/JjX+OxehITHNRNDrg	2020-04-16 18:34:32.158706	\\x58766f324649673155394833375369583052466d4b3159554c3879436b4c7a6e44564b56426e795f7866493d
+83	test1	test1@test1.com	$argon2id$v=19$m=32768,t=16,p=2$wriFKHG+oYeNkZqDhw0TeQ$TJ+gokBCi14nsLI+97JkuPeCXvpjvKjGfBa5PyjwvZM	2020-04-16 22:49:42.158708	\\x58766f324649673155394833375369583052466d4b3159554c3879436b4c7a6e44564b56426e795f7866493d
 \.
 
 
@@ -192,7 +193,7 @@ COPY public.users (id, uname, email, pword, date_added, hash) FROM stdin;
 -- Name: auth_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rsbuhqmqigficf
 --
 
-SELECT pg_catalog.setval('public.auth_session_id_seq', 194, true);
+SELECT pg_catalog.setval('public.auth_session_id_seq', 197, true);
 
 
 --
@@ -206,7 +207,7 @@ SELECT pg_catalog.setval('public.messages_msgid_seq', 109, true);
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rsbuhqmqigficf
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 82, true);
+SELECT pg_catalog.setval('public.users_id_seq', 83, true);
 
 
 --

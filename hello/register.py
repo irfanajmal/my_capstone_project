@@ -23,7 +23,7 @@ class UserRegistrationForm(forms.ModelForm):
                             help_text='<i>Password must be: <br>- Between 8-20 characters<br>- Must have one small alphabet<br>- Must have one capital alphanet<br>- Must have one number<br>- Must have one special character</i>')
     confirm_password = forms.CharField(label='Confirm Password', max_length=20, min_length=8, required=True, widget=forms.PasswordInput,
                                        validators=[confirmPass])
-    email = forms.EmailField(label='Email Address',max_length=256,  required=True, validators=[validate_email], help_text='<i>Optional</i>')
+    email = forms.EmailField(label='Email Address',max_length=256,  required=True, validators=[validate_email], help_text='<i>Will be used for password retrieval.</i>')
 
     class Meta:
         model = User
