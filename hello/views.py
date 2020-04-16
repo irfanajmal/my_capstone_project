@@ -275,7 +275,7 @@ def get_messages(username):
         i = 0
         for msg in from_msgs:
             if from_msgs[i][1] is not None:
-                dec_msg = mdecode(msg[1], msg[0])
+                dec_msg = msg_decode(msg[1], msg[0])
                 _d_from_msgs = list(msg)
                 _d_from_msgs[1] = dec_msg
             i += 1
@@ -284,7 +284,7 @@ def get_messages(username):
         i = 0
         for msg in to_msgs:
             if to_msgs[i][1] is not None:
-                dec_msg = mdecode(msg[1], username)
+                dec_msg = msg_decode(msg[1], username)
                 _d_to_msgs = list(msg)
                 _d_to_msgs[1] = dec_msg
             d_to_msgs.append(_d_to_msgs)
@@ -303,10 +303,20 @@ def send(request):
     user_name = request.POST['User_Name']
     to_user = str(request.POST['To']).lower()
     msg = request.POST['Message']
-    enc_msg = mencode(msg, user_name)
+    enc_msg = msg_encode(msg, user_name)
     now = time.strftime("%a, %d %b %y %H:%M:%S.%s")
     conn = myDB.connect()
     cursor = conn.cursor()
+    try:
+        cursor.execute("""SELECT id FROM users WHERE uname = %(username)s""",
+                       {'username': to_user})
+        check_user = cursor.fetchone()
+    except:
+        pass
+    if check_user is None:
+        message = "Error! " + to_user + " was not found."
+        return message
+
     sql = "INSERT INTO messages (from_usr, to_usr, bmessage, msg_time) VALUES (%s, %s, %s, %s)"
     val = (user_name, to_user, enc_msg, now)
     try:
@@ -327,28 +337,28 @@ def send(request):
     return message
 
 
-def mdecode(enmessage, username):
+def msg_decode(enmessage, username):
     conn = myDB.connect()
     cursor = conn.cursor()
-    cursor.execute("""SELECT pword FROM users WHERE uname = %(username)s""", {'username': username})
-    my_hash = cursor.fetchone()
+    cursor.execute("""SELECT encode(users.hash, 'hex') FROM users WHERE uname = %(username)s""", {'username': username})
+    hex_hash = cursor.fetchone()
+    key = bytes.fromhex(hex_hash[0])
     cursor.close()
     conn.close()
-    key = gen_key_m(my_hash)
     f = Fernet(key)
-    em = bytes.fromhex(enmessage)
-    msg = f.decrypt(em)
+    byte_message = bytes.fromhex(enmessage)
+    msg = f.decrypt(byte_message)
     return msg.decode()
 
 
-def mencode(message, username):
+def msg_encode(message, username):
     conn = myDB.connect()
     cursor = conn.cursor()
-    cursor.execute("""SELECT pword FROM users WHERE uname = %(username)s""", {'username': username})
-    my_hash = cursor.fetchone()
+    cursor.execute("""SELECT encode(users.hash, 'hex') FROM users WHERE uname = %(username)s""", {'username': username})
+    hex_hash = cursor.fetchone()
+    key = bytes.fromhex(hex_hash[0])
     cursor.close()
     conn.close()
-    key = gen_key_m(my_hash)
     f = Fernet(key)
     enm = f.encrypt(message.encode())
     return enm
@@ -367,6 +377,3 @@ def gen_key_m(my_hash):
     )
     return base64.urlsafe_b64encode(kdf.derive(password))
 
-
-def password_reset(request):
-    return render(request, "registration/password_reset_form.html")

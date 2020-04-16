@@ -80,7 +80,13 @@
         </table>
     </div>
     <br><br>
-    <p>{{ message }}</p>
+    <p>{% if "Error" in message %}
+            <span style="font-weight: bold; color: crimson" >{{ message }}</span>
+        {% else %}
+            <span style="font-weight: bold; color: #003366  " >{{ message }}</span>
+        {% endif %}
+    </p>
+
     <br>
   <div class="div-full-page" id="inbox_view"  >
     <p></p>

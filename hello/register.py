@@ -8,6 +8,7 @@ from django.core.validators import RegexValidator
 from django.shortcuts import render
 from django.core.validators import validate_email
 from .db import myDB
+from .views import gen_key_m
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -49,39 +50,43 @@ def register(request):
 
 def create_user(cd):
     uname = str(cd['uname']).lower()
-    pword = cd['pword']
-    email = cd['email']
+    pword = str(cd['pword'])
+    email = str(cd['email']).lower()
     # now = time.localtime()
     now = time.strftime("%a, %d %b %y %H:%M:%S.%s")
 
     conn = myDB.connect()
     cursor = conn.cursor()
 
-    saltLen = 16
-    hashLen = 32
-    pword_salt = os.urandom(saltLen).hex()
-    bpword_salt = bytes(pword_salt, encoding='utf-8')
-    bpword = bytes(pword, encoding='utf-8')
-
-    hash = argon2.hash_password_raw(
-        time_cost=16, memory_cost=2 ** 15, parallelism=2, hash_len=hashLen,
-        password=bpword, salt=bpword_salt, type=argon2.low_level.Type.ID)
-
-    argon2Hasher = argon2.PasswordHasher(
-        time_cost=16, memory_cost=2 ** 15, parallelism=2, hash_len=hashLen, salt_len=saltLen)
-    hash = argon2Hasher.hash(pword)
-
-    # check if user exists
-    cursor.execute("SELECT id FROM users WHERE uname=%s", (uname,))
+    sql = "SELECT id FROM users WHERE uname=%s and email=%s"
+    val = (uname, email)
+    cursor.execute(sql, val)
     rows = cursor.fetchone()
+
     if rows != None:
         result = False
     else:
-        sql = "INSERT INTO users (uname, email, pword, date_added) VALUES (%s, %s, %s, %s)"
-        val = (uname, email, hash, now)
+        saltLen = 16
+        hashLen = 32
+        pword_salt = os.urandom(saltLen).hex()
+        bpword_salt = bytes(pword_salt, encoding='utf-8')
+        bpword = bytes(pword, encoding='utf-8')
+
+        hash = argon2.hash_password_raw(
+            time_cost=16, memory_cost=2 ** 15, parallelism=2, hash_len=hashLen,
+            password=bpword, salt=bpword_salt, type=argon2.low_level.Type.ID)
+
+        argon2Hasher = argon2.PasswordHasher(
+            time_cost=16, memory_cost=2 ** 15, parallelism=2, hash_len=hashLen, salt_len=saltLen)
+        hashed_pword = argon2Hasher.hash(pword)
+
+        message_hash = gen_key_m(pword)
+
+        sql = "INSERT INTO users (uname, email, pword, date_added, hash) VALUES (%s, %s, %s, %s, %s)"
+        val = (uname, email, hashed_pword, now, message_hash)
         cursor.execute(sql, val)
         conn.commit()
         result = True
         cursor.close()
         conn.close()
-    return result
+        return result
