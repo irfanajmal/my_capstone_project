@@ -30,5 +30,6 @@ urlpatterns = [
     path("reset/", registration.reset, name="reset"),
     path("change/", registration.change, name="reset"),
     url(r'^favicon\.ico$',RedirectView.as_view(url='/static/images/favicon.ico')),
-] + static(settings.DBDUMP_URL, document_root=settings.DBDUMP_ROOT)
+]
+# + static(settings.DBDUMP_URL, document_root=settings.DBDUMP_ROOT)
 

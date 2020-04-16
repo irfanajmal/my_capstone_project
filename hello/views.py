@@ -6,6 +6,7 @@ import argon2
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render
 from .db import myDB
 import cryptography
@@ -224,11 +225,11 @@ def db(request):
                 # db_file_name = "Heroku_Postgres_DB.sql"
                 db_path_file = "dbdump/" + db_file_name
                 File1 = open(db_path_file, "w")
-
                 File1.write(output)
                 File1. close()
+                return FileResponse(open(db_path_file,'rb'))
             else:
-                  db_file_name = os.path.basename(files[0])
+                return FileResponse(open(files[0], 'rb'))
 
     submitted2 = False
     return render(request, "db.html", {'db_file_name': db_file_name, 'submitted': submitted2})

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,23 +16,19 @@
 <body>
 {% block content %}
     <h3>Download Heroku Postgres DB DUMP SQL format file.</h3>
-
         <form method="POST" action="/dbdump/" name='dbdump' >
+            {% csrf_token %}
             <input type="hidden" id="submitted" name="submitted" value="True" >
             <input type="hidden" id="db_file_name" name="db_file_name" value={{ db_file_name }} >
             <input type="hidden" id="generated_on" name="generated_on" value="{{ generated_on }}" >
-            <button class="button" type="submit" value="Submit">Generate latest DBDUMP</button>
-        {% csrf_token %}
+            <button class="button" type="submit" value="Submit">Generate and Download latest DBDUMP</button>
         </form>
-
-
     <p></p>
     {% if db_file_name != "" %}
-        A fresh dbdump file is generated. Download from link below:
+        A fresh dbdump file is generated. Download from link below:/dbdump/Heroku_Postgres_DB_16_04_2020-203459-224466.sql
         <br><br>
         <a href={{ db_file_name }}>{{ db_file_name }}</a>
     {% endif %}
-
 {% endblock content %}
 </body>
 </html>

@@ -1,5 +1,5 @@
 git add .
-git commit -m "debug"
+git commit -m "finel"
 git push heroku master
 heroku open
 

@@ -158,7 +158,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.auth_session (id, username, session_id, expiry) FROM stdin;
-192	user1	6901f3d557925eb2bd0659d9077d94ca	2020-04-16 16:42:40
 \.
 
 
@@ -193,7 +192,7 @@ COPY public.users (id, uname, email, pword, date_added, hash) FROM stdin;
 -- Name: auth_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rsbuhqmqigficf
 --
 
-SELECT pg_catalog.setval('public.auth_session_id_seq', 192, true);
+SELECT pg_catalog.setval('public.auth_session_id_seq', 194, true);
 
 
 --
