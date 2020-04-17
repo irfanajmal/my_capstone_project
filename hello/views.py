@@ -1,13 +1,15 @@
 import datetime
 import subprocess
 import time
+import pytz
+from django.utils import timezone
 import glob
 import argon2
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.http import HttpResponse, FileResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .db import myDB
 import cryptography
 from cryptography.fernet import Fernet
@@ -85,6 +87,15 @@ class MySession:
         MySession.conn.commit()
         return "User Logged out."
 
+
+def tz_test(request):
+    if request.method == 'POST':
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')
+    else:
+        return render(request, 'tz_test.html', {'timezones': pytz.all_timezones})
+
+    return render(request, 'tz_test.html', {'var': var,})
 
 def index(request):
     submitted = False
@@ -258,6 +269,8 @@ def user_auth(cd, request) -> object:
 
 
 def get_messages(username):
+    d_from_msgs = []
+    d_to_msgs = []
     conn = myDB.connect()
     cursor = conn.cursor()
     try:
@@ -267,9 +280,11 @@ def get_messages(username):
         cursor.execute("""SELECT to_usr, encode(messages.bmessage, 'hex'), msg_time FROM messages WHERE from_usr = %(username)s""",
                        {'username': username})
         to_msgs = cursor.fetchall()
+        cursor.execute("""SELECT timezone FROM users WHERE uname = %(username)s""", {'username': username})
+        tz_t = cursor.fetchone()
+        tz = str(tz_t[0])
+        time_zone = pytz.timezone(tz)
 
-        d_from_msgs = []
-        d_to_msgs = []
         _d_from_msgs = []
         _d_to_msgs = []
 
@@ -279,6 +294,9 @@ def get_messages(username):
                 dec_msg = msg_decode(msg[1], msg[0])
                 _d_from_msgs = list(msg)
                 _d_from_msgs[1] = dec_msg
+                utc_naive = _d_from_msgs[2].replace(tzinfo=pytz.utc)
+                localDatetime = utc_naive.astimezone(time_zone)
+                _d_from_msgs[2] = localDatetime
             i += 1
             d_from_msgs.append(_d_from_msgs)
 
@@ -288,6 +306,9 @@ def get_messages(username):
                 dec_msg = msg_decode(msg[1], username)
                 _d_to_msgs = list(msg)
                 _d_to_msgs[1] = dec_msg
+                utc_naive = _d_to_msgs[2].replace(tzinfo=pytz.utc)
+                localDatetime = utc_naive.astimezone(time_zone)
+                _d_to_msgs[2] = localDatetime
             d_to_msgs.append(_d_to_msgs)
             i += 1
 

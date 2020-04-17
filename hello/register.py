@@ -1,6 +1,6 @@
 import os
 import time
-
+import pytz
 import argon2
 from django import forms
 from django.contrib.auth.models import User
@@ -38,7 +38,8 @@ def signup(request):
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
                 cd = form.cleaned_data
-                if create_user(cd):
+                timezone = request.POST['timezone']
+                if create_user(cd, timezone):
                     submitted = True
                 else:
                     submitted = False
@@ -49,10 +50,10 @@ def signup(request):
         message = e
         form = UserRegistrationForm()
 
-    return render(request, 'signup.html', {'form': form, 'submitted': submitted, 'message': message})
+    return render(request, 'signup.html', {'form': form, 'submitted': submitted, 'message': message, 'timezones': pytz.all_timezones, 'TIME_ZONE': "UTC"})
 
 
-def create_user(cd):
+def create_user(cd, timezone):
     uname = str(cd['uname']).lower()
     pword = str(cd['pword'])
     email = str(cd['email']).lower()
@@ -86,8 +87,8 @@ def create_user(cd):
 
         message_hash = gen_key_m(pword)
 
-        sql = "INSERT INTO users (uname, email, pword, date_added, hash) VALUES (%s, %s, %s, %s, %s)"
-        val = (uname, email, hashed_pword, now, message_hash)
+        sql = "INSERT INTO users (uname, email, pword, date_added, hash, timezone) VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (uname, email, hashed_pword, now, message_hash, timezone)
         cursor.execute(sql, val)
         conn.commit()
         result = True

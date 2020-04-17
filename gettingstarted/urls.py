@@ -21,6 +21,7 @@ import hello.registration as registration
 
 urlpatterns = [
     path("", hello.views.index, name="index"),
+    path("tz_test/", hello.views.tz_test, name="tz_test"),
     path("inbox/", hello.views.inbox, name="inbox"),
     path("signup/", register.signup, name="signup"),
     path("dbdump/", hello.views.db, name="dbdump"),
